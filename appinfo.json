@@ -1,0 +1,43 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "yuen.lw@gmail.com",
+    "longName": "Invader",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/ship.png",
+                "name": "SHIP",
+                "type": "png"
+            },
+            {
+                "file": "images/yellow.png",
+                "name": "INVADER_YELLOW",
+                "type": "png"
+            },
+            {
+                "file": "images/blue.png",
+                "name": "INVADER_BLUE",
+                "type": "png"
+            },
+            {
+                "file": "images/pink.png",
+                "name": "INVADER_PINK",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Invader",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "21f284f4-358a-4bfe-9d5c-99e398ffc5c3",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
