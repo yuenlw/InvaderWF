@@ -12,7 +12,7 @@ typedef struct {
 } Time;
 
 static Window *s_main_window;
-static Layer *s_canvas_layer;
+static Layer *s_window_layer;
 
 static GBitmap  *s_hour_invader;
 static GBitmap  *s_minute_12_invader;
@@ -59,8 +59,8 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
 
 
   // Redraw
-  if(s_canvas_layer) {
-    layer_mark_dirty(s_canvas_layer);
+  if(s_window_layer) {
+    layer_mark_dirty(s_window_layer);
   }
 }
 
@@ -70,6 +70,7 @@ static int hours_to_minutes(int hours_out_of_12) {
 
 static void update_proc(Layer *layer, GContext *ctx) {
   // Color background?
+  layer_remove_child_layers(layer);
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, GRect(0, 0, 144, 168), 0, GCornerNone);
   
@@ -138,17 +139,17 @@ static void load_images(){
 }
 
 static void window_load(Window *window) {
-  Layer *window_layer = window_get_root_layer(window);
-  GRect window_bounds = layer_get_bounds(window_layer);
+  s_window_layer = window_get_root_layer(window);
+  GRect window_bounds = layer_get_bounds(s_window_layer);
 
   load_images();
   
-  layer_set_update_proc(window_layer, update_proc);
+  layer_set_update_proc(s_window_layer, update_proc);
   
 }
 
 static void window_unload(Window *window) {
-  layer_destroy(s_canvas_layer);
+  
 }
 
 /*********************************** App **************************************/

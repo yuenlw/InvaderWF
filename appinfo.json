@@ -10,6 +10,7 @@
         "media": [
             {
                 "file": "images/ship.png",
+                "menuIcon": true,
                 "name": "SHIP",
                 "type": "png"
             },
@@ -36,8 +37,8 @@
         "basalt"
     ],
     "uuid": "21f284f4-358a-4bfe-9d5c-99e398ffc5c3",
-    "versionLabel": "1.0",
+    "versionLabel": "0.1",
     "watchapp": {
-        "watchface": false
+        "watchface": true
     }
 }
