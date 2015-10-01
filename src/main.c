@@ -19,37 +19,14 @@ static GBitmap  *s_minute_12_invader;
 static GBitmap  *s_minute_5_invader;
 static GBitmap  *s_ship;
 
-static Time s_last_time, s_anim_time;
-static int s_radius = 0, s_anim_hours_60 = 0, s_color_channels[3];
-static bool s_animating = false;
+static Time s_last_time;
 
-/*************************** AnimationImplementation **************************/
+static TextLayer *s_date_layer;
+static GFont s_date_font;
+static char s_date_buffer[16];
 
-static void animation_started(Animation *anim, void *context) {
-  s_animating = true;
-}
-
-static void animation_stopped(Animation *anim, bool stopped, void *context) {
-  s_animating = false;
-}
-
-static void animate(int duration, int delay, AnimationImplementation *implementation, bool handlers) {
-  Animation *anim = animation_create();
-  animation_set_duration(anim, duration);
-  animation_set_delay(anim, delay);
-  animation_set_curve(anim, AnimationCurveEaseInOut);
-  animation_set_implementation(anim, implementation);
-  if(handlers) {
-    animation_set_handlers(anim, (AnimationHandlers) {
-      .started = animation_started,
-      .stopped = animation_stopped
-    }, NULL);
-  }
-  animation_schedule(anim);
-}
 
 /************************************ UI **************************************/
-
 
 static void tick_handler(struct tm *tick_time, TimeUnits changed) {
   // Store time
@@ -57,15 +34,15 @@ static void tick_handler(struct tm *tick_time, TimeUnits changed) {
   s_last_time.hours -= (s_last_time.hours > 12) ? 12 : 0;
   s_last_time.minutes = tick_time->tm_min;
 
+  // Copy date into buffer from tm structure
+  
+  strftime(s_date_buffer, sizeof(s_date_buffer), "%a %d %b", tick_time);
 
+ 
   // Redraw
   if(s_window_layer) {
     layer_mark_dirty(s_window_layer);
   }
-}
-
-static int hours_to_minutes(int hours_out_of_12) {
-  return (int)(float)(((float)hours_out_of_12 / 12.0F) * 60.0F);
 }
 
 static void update_proc(Layer *layer, GContext *ctx) {
@@ -73,6 +50,10 @@ static void update_proc(Layer *layer, GContext *ctx) {
   layer_remove_child_layers(layer);
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, GRect(0, 0, 144, 168), 0, GCornerNone);
+  
+   // Show the date
+  text_layer_set_text(s_date_layer, s_date_buffer);
+  layer_add_child(layer, text_layer_get_layer(s_date_layer));
   
   //fill hours
   for(int i = 1; i <= s_last_time.hours  ; i++){
@@ -130,7 +111,6 @@ static void update_proc(Layer *layer, GContext *ctx) {
 }
 static void load_images(){
    // Load the image and check it was succcessful
-
   s_hour_invader = gbitmap_create_with_resource(RESOURCE_ID_INVADER_PINK);  
   s_minute_12_invader = gbitmap_create_with_resource(RESOURCE_ID_INVADER_BLUE);  
   s_minute_5_invader = gbitmap_create_with_resource(RESOURCE_ID_INVADER_YELLOW);  
@@ -140,23 +120,32 @@ static void load_images(){
 
 static void window_load(Window *window) {
   s_window_layer = window_get_root_layer(window);
-  GRect window_bounds = layer_get_bounds(s_window_layer);
-
+  
   load_images();
   
   layer_set_update_proc(s_window_layer, update_proc);
   
+  
+  // Create date TextLayer
+  s_date_layer = text_layer_create(GRect(0, 0, 144, 25));
+  text_layer_set_text_color(s_date_layer, GColorWhite);
+  text_layer_set_background_color(s_date_layer, GColorClear);
+  text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
+
+ 
+  s_date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_DOS_FONT_16));
+  text_layer_set_font(s_date_layer, s_date_font);
+
+  
 }
 
 static void window_unload(Window *window) {
+
   
 }
 
 /*********************************** App **************************************/
 
-static int anim_percentage(AnimationProgress dist_normalized, int max) {
-  return (int)(float)(((float)dist_normalized / (float)ANIMATION_NORMALIZED_MAX) * (float)max);
-}
 
 static void init() {
   srand(time(NULL));
@@ -175,6 +164,9 @@ static void init() {
 }
 
 static void deinit() {
+  fonts_unload_custom_font(s_date_font);
+  text_layer_destroy(s_date_layer);
+  
   window_destroy(s_main_window);
 }
 

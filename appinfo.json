@@ -9,6 +9,11 @@
     "resources": {
         "media": [
             {
+                "file": "fonts/perfect-dos-vga.ttf",
+                "name": "DOS_FONT_16",
+                "type": "font"
+            },
+            {
                 "file": "images/ship.png",
                 "menuIcon": true,
                 "name": "SHIP",
