@@ -1,21 +1,28 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_CONDITIONS": 1,
+        "KEY_TEMPERATURE": 0
+    },
     "capabilities": [
-        ""
+        "location"
     ],
-    "companyName": "yuen.lw@gmail.com",
-    "longName": "Invader",
+    "companyName": "Enkidu\u00b2",
+    "longName": "Invader Time WatchFace",
     "projectType": "native",
     "resources": {
         "media": [
             {
+                "file": "images/black.png",
+                "name": "BLACK",
+                "type": "png"
+            },
+            {
                 "file": "fonts/perfect-dos-vga.ttf",
-                "name": "DOS_FONT_16",
+                "name": "DOS_FONT_14",
                 "type": "font"
             },
             {
                 "file": "images/ship.png",
-                "menuIcon": true,
                 "name": "SHIP",
                 "type": "png"
             },
@@ -26,6 +33,7 @@
             },
             {
                 "file": "images/blue.png",
+                "menuIcon": true,
                 "name": "INVADER_BLUE",
                 "type": "png"
             },
@@ -42,7 +50,7 @@
         "basalt"
     ],
     "uuid": "21f284f4-358a-4bfe-9d5c-99e398ffc5c3",
-    "versionLabel": "0.1",
+    "versionLabel": "0.4",
     "watchapp": {
         "watchface": true
     }
